@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupo Mazel</title>
+    <!-- CSS Modules -->
+    <link rel="stylesheet" href="style.css"> <!-- Main layout -->
+    <link rel="stylesheet" href="css/components.css"> <!-- Modern UI components -->
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Top Navbar (Amazon/Mercado Libre Style) -->
+    <header class="main-header">
+        <!-- Level 1: Search & Branding -->
+        <div class="header-top">
+            <div class="header-content-wrapper">
+                <div class="branding" onclick="renderPage('marketplace')">
+                    <img src="mazel.jpg" alt="Mazel Logo" class="header-logo">
+                    <h2>Mazel</h2>
+                </div>
+
+                <div class="search-container-header">
+                    <input type="text" id="market-search-header" placeholder="Buscar productos, marcas y más...">
+                    <button id="btn-search-header"><i class="fas fa-search"></i></button>
+                </div>
+
+                <div class="header-user-actions">
+                    <div class="user-action-item" id="user-profile-btn" style="visibility: hidden;">
+                        <span class="action-sub">Hola, Identifícate</span>
+                        <span class="action-main">Cuenta y Listas <i class="fas fa-caret-down"></i></span>
+                    </div>
+                    <div class="user-action-item" id="user-orders-btn" onclick="renderPage('pedidos')" style="visibility: hidden;">
+                        <span class="action-sub">Devoluciones</span>
+                        <span class="action-main">y Pedidos</span>
+                    </div>
+                    <div class="cart-container-header" id="cart-btn-nav">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count">0</span>
+                        <span class="cart-label">Carrito</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level 2: Navigation Links -->
+        <nav class="header-bottom">
+            <div class="header-content-wrapper">
+                <ul class="main-nav-links">
+                    <li class="nav-dropdown" id="categories-dropdown-btn">
+                        <a href="#"><i class="fas fa-bars"></i> Todas las categorías</a>
+                        <div class="dropdown-content" id="categories-list-dropdown">
+                            <!-- Categories will be injected here -->
+                        </div>
+                    </li>
+                    <li><a href="#" onclick="renderPage('marketplace', {tag: 'ofertas'})">Ofertas</a></li>
+                    <li><a href="#" onclick="renderPage('marketplace', {tag: 'cupones'})">Cupones</a></li>
+                    <li><a href="#" onclick="renderPage('marketplace', {tag: 'tiendas'})">Tiendas Oficiales</a></li>
+                    <li><a href="#" onclick="renderPage('marketplace')">Comprar</a></li>
+                    <li><a href="#" data-page="negocio">Vender</a></li>
+                    <li><a href="#" data-page="red-social">Red Social</a></li>
+                </ul>
+                <ul class="secondary-nav-links">
+                    <li><a href="#" onclick="showAuth()">Crear cuenta</a></li>
+                    <li><a href="#" onclick="showAuth()">Ingresar</a></li>
+                    <li id="logout-btn" style="display: none;"><a href="#" onclick="Auth.logout()">Salir</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-wrapper">
+        <!-- Main Content Area -->
+        <main class="content-container-full">
+            <section id="content-area" class="content-area-full">
+                <!-- SPA Content -->
+            </section>
+        </main>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <button class="modal-close" id="close-product">&times;</button>
+            <div id="product-detail-container">
+                <!-- Product details will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal-overlay" id="cart-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="close-cart">&times;</button>
+            <h2 style="margin-bottom: 20px;"><i class="fas fa-shopping-cart"></i> Tu Carrito</h2>
+            <div id="cart-items-container">
+                <!-- Cart items will be injected here -->
+            </div>
+            <div id="cart-footer" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #eee;">
+                <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px;">
+                    <span>Total:</span>
+                    <span id="cart-total-display">$0.00</span>
+                </div>
+                <button class="btn-buy" id="checkout-btn" style="padding: 15px;">Proceder al Pago (WhatsApp)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Overlay (Robust Authentication System) -->
+    <div class="auth-overlay" id="auth-overlay">
+        <div class="auth-card" style="position: relative;">
+            <button class="modal-close" onclick="hideAuth()" style="position: absolute; top: 15px; right: 15px; border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #777;">&times;</button>
+            <h2 style="text-align: center; margin-bottom: 10px;">Bienvenido a Mazel</h2>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 30px;">Sistema de usuarios robusto y seguro</p>
+            
+            <form class="auth-form" id="login-form">
+                <label style="font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; display: block;">Canal de Autenticación</label>
+                <select id="auth-type" style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ddd;">
+                    <option value="email">Correo Electrónico</option>
+                    <option value="phone">Teléfono (+57)</option>
+                    <option value="username">Nombre de Usuario</option>
+                </select>
+
+                <input type="text" id="auth-id" placeholder="Identificador (ej: admin@mazel.com)" required>
+                <input type="password" id="auth-pass" placeholder="Contraseña" required>
+                
+                <div style="font-size: 0.75rem; color: #777; margin-bottom: 20px;">
+                    <p><i class="fas fa-shield-alt"></i> Seguridad Activa: CSRF, Rate Limiting, Fingerprinting</p>
+                </div>
+
+                <button type="submit">Iniciar Sesión</button>
+                <p style="text-align: center; margin-top: 20px; font-size: 0.85rem;">
+                    ¿No tienes cuenta? <a href="#" style="color: var(--accent-color);">Regístrate ahora</a>
+                </p>
+            </form>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 0.7rem; color: #999; text-align: center;">
+                <p>Usa <b>admin@mazel.com</b> para Admin | <b>negocio@mazel.com</b> para Tienda</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Modules -->
+    <script src="js/auth.js"></script>
+    <script src="js/business.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/gamification.js"></script>
+    <script src="js/marketplace.js"></script>
+    <script src="js/dropshipping.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
